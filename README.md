@@ -67,3 +67,9 @@ The unit test folder is tests/ which is already configured in file phpunit.xml.
 
 It will take some time for me to use some ORM framework like Laravel/orm or Doctrine well.
 But the use of ORM will grant the project more scalability.
+
+* Paginating Query Results 
+
+For messages, if there are many records, we can set pagination query and set 100 limit for each query.
+Also use resumeToken to concat the results. More general solution is to build a long connection such 
+as WebSocket connection between the user and the group server, and server with real-time message stream.

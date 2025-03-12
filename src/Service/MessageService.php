@@ -1,6 +1,7 @@
 <?php
 
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class MessageService {
     private $db;
@@ -9,11 +10,20 @@ class MessageService {
         $this->db = $db;
     }
 
-    public function createMessage(Response $response, $userId, $groupId, $data) {
+    public function createMessage(Request $request, Response $response) {
+        $data = $request->getParsedBody();
         $content = $data['content'] ?? '';
-
+        $userId = $data['userId'] ?? null;
+        $groupId = $data['groupId'] ?? null;
+        // parameter check
         if (empty($content)) {
             return $this->jsonResponse($response, ['error' => 'Message content cannot be empty'], 400);
+        }
+        if (empty($userId)) {
+            return $this->jsonResponse($response, ['error' => 'user Id cannot be empty'], 400);
+        }
+        if (empty($groupId)) {
+            return $this->jsonResponse($response, ['error' => 'group Id cannot be empty'], 400);
         }
 
         // Check if group exists
@@ -22,25 +32,40 @@ class MessageService {
         if (!$stmt->fetch()) {
             return $this->jsonResponse($response, ['error' => 'Group does not exist'], 404);
         }
+        // Check if user exists
+        $stmt = $this->db->prepare("SELECT id FROM `user` WHERE id = ?");
+        $stmt->execute([$userId]);
+        if (!$stmt->fetch()) {
+            return $this->jsonResponse($response, ['error' => 'User does not exist'], 404);
+        }
 
         try {
-            $timestamp = date('Y-m-d H:i:s');
-            $stmt = $this->db->prepare("INSERT INTO message (user_id, group_id, content, created_at) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$userId, $groupId, $content, $timestamp]);
+            $stmt = $this->db->prepare("INSERT INTO message (user_id, group_id, content) VALUES (?, ?, ?)");
+            $stmt->execute([$userId, $groupId, $content]);
 
             return $this->jsonResponse($response, [
                 'id' => $this->db->lastInsertId(),
                 'user_id' => $userId,
                 'group_id' => $groupId,
-                'content' => $content,
-                'created_at' => $timestamp
+                'content' => $content
             ], 201);
         } catch (PDOException $e) {
             return $this->jsonResponse($response, ['error' => 'Database error: ' . $e->getMessage()], 500);
         }
     }
 
-    public function getGroupMessages(Response $response, $groupId) {
+    public function getGroupMessages(Request $request, Response $response, array $args) {
+        // Get the path parameter from $args
+        $groupId = $args['id'] ?? null;
+        // Get query parameters from the request
+        $queryParams = $request->getQueryParams();
+        $limit = $queryParams['limit'] ?? 10;
+        $offset = $queryParams['offset'] ?? 0;
+
+        // parameter check
+        if (!$groupId) {
+            return $this->jsonResponse($response, ['error' => 'Group ID is required'], 400);
+        }
         // Check if group exists
         $stmt = $this->db->prepare("SELECT id FROM `group` WHERE id = ?");
         $stmt->execute([$groupId]);
@@ -54,8 +79,9 @@ class MessageService {
             JOIN user u ON m.user_id = u.id
             WHERE m.group_id = ?
             ORDER BY m.created_at ASC
+            LIMIT ? OFFSET ?
         ");
-        $stmt->execute([$groupId]);
+        $stmt->execute([$groupId, $limit, $offset]);
         $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $this->jsonResponse($response, $messages);

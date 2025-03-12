@@ -29,8 +29,8 @@ return function (App $app) {
     $app->get('/group', [$groupService, 'getGroup'])->add($authMiddleware);
 
     // create message
-    $app->post('/groups/{id}/messages', [$messageService, 'createMessage'])->add($authMiddleware);
-    // get all message of group
-    $app->get('/groups/{id}/messages', [$messageService, 'getGroupMessages'])->add($authMiddleware);
+    $app->post('/message', [$messageService, 'createMessage'])->add($authMiddleware);
+    // get all message of a group
+    $app->get('/message/group/{id}', [$messageService, 'getGroupMessages'])->add($authMiddleware);
 
 };
