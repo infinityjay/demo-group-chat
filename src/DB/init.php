@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Init the sqlite database the db file can be found under root directory.
+ *
+ * @return PDO
+ */
 function initializeDatabase(): PDO {
     static $dbInstance = null;
 
@@ -29,6 +34,13 @@ function initializeDatabase(): PDO {
             group_id    INTEGER NOT NULL,
             content     TEXT NOT NULL,
             created_at  TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )",
+        "CREATE TABLE IF NOT EXISTS user_group (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id     INTEGER NOT NULL,
+            group_id    INTEGER NOT NULL,
+            created_at  TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE (user_id, group_id)
         )"
     ];
 

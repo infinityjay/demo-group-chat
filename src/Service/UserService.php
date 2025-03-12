@@ -61,6 +61,39 @@ class UserService {
 
     }
 
+    public function joinGroup(Request $request, Response $response, array $args) {
+        // Get the path parameter from $args
+        $groupId = $args['id'] ?? null;
+        $params = $request->getQueryParams();
+        $userId = $params['userId'] ?? null;
+
+        // check parameter
+        if (empty($userId)) {
+            return $this->jsonResponse($response, ['error' => 'userId cannot be empty'], 400);
+        }
+        if (empty($groupId)) {
+            return $this->jsonResponse($response, ['error' => 'groupId cannot be empty'], 400);
+        }
+
+        try {
+            $stmt = $this->db->prepare("INSERT INTO user_group (user_id, group_id) VALUES (?, ?)");
+            $stmt->execute([$userId, $groupId]);
+
+            return $this->jsonResponse($response, [
+                'id' => $this->db->lastInsertId(),
+                'userId' => $userId,
+                'groupId' => $groupId
+            ], 201);
+        } catch (PDOException $e) {
+            // unique key error
+            if ($e->getCode() == 23000) {
+                return $this->jsonResponse($response, ['error' => 'user already in the group'], 409);
+            }
+            // server error
+            return $this->jsonResponse($response, ['error' => 'Database error: ' . $e->getMessage()], 500);
+        }
+    }
+
     private function jsonResponse(Response $response, $data, $status = 200) {
         $response->getBody()->write(json_encode($data));
         return $response

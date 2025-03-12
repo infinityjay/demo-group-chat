@@ -4,6 +4,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Psr7\Response;
 
+/**
+ * Validate the token and generate token
+ */
 class AuthMiddleware {
     private $db;
 
@@ -39,7 +42,7 @@ class AuthMiddleware {
             return $response->withStatus(401)->withHeader('Content-Type', 'application/json');
         }
 
-        // Add user data to request attributes
+        // add user data to request attributes
         $request = $request->withAttribute('user', $user);
 
         return $handler->handle($request);

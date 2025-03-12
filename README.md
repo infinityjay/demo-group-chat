@@ -80,7 +80,7 @@ and test the APIs.
 
 * Use ORM framework
 
-It will take some time for me to use some ORM framework like Laravel/orm or Doctrine well.
+It will take some time for me to learn and use some ORM framework like **Laravel/orm** or **Doctrine** well.
 But the use of ORM will grant the project more scalability.
 
 * Paginating Query Results 
@@ -91,9 +91,9 @@ as WebSocket connection between the user and the group server, and server with r
 
 * Automation integration test
 
-There are standard ways to use postman and newman to develop the automation integration test for APIs. 
-I once wrote a simple automation test tool with newman and gitlab. I also wrote part of the solution on 
+There are standard ways to use **postman** and **newman** to develop the automation integration test for APIs. 
+I once developed a simple automation test tool with **newman** and **gitlab**. I also share part of the solution on 
 my [personal blog](https://infinityjay.github.io/ci/cd/Gitlab-CI-use-mysql-service/). Due to time and 
-environment limitations, I did not develop such testing tools.
+environment limitations, I do not develop such testing tools here.
 
 

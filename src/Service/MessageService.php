@@ -61,16 +61,27 @@ class MessageService {
         $queryParams = $request->getQueryParams();
         $limit = $queryParams['limit'] ?? 10;
         $offset = $queryParams['offset'] ?? 0;
+        $user = $request->getAttribute('user');
+        $userId = $user['id'] ?? null;
 
         // parameter check
         if (!$groupId) {
             return $this->jsonResponse($response, ['error' => 'Group ID is required'], 400);
+        }
+        if (!$userId) {
+            return $this->jsonResponse($response, ['error' => 'User ID is required'], 400);
         }
         // Check if group exists
         $stmt = $this->db->prepare("SELECT id FROM `group` WHERE id = ?");
         $stmt->execute([$groupId]);
         if (!$stmt->fetch()) {
             return $this->jsonResponse($response, ['error' => 'Group does not exist'], 404);
+        }
+        // Check if user in the group
+        $stmt = $this->db->prepare("SELECT id FROM `user_group` WHERE user_id = ? AND group_id = ?");
+        $stmt->execute([$userId, $groupId]);
+        if (!$stmt->fetch()) {
+            return $this->jsonResponse($response, ['error' => 'User is not in the group'], 404);
         }
 
         $stmt = $this->db->prepare("

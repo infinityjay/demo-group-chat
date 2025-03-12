@@ -22,6 +22,8 @@ return function (App $app) {
     $app->post('/user', [$userService, 'createUser']);
     // get user info
     $app->get('/user', [$userService, 'getUser'])->add($authMiddleware);
+    // user join group
+    $app->get('/user/group/{id}', [$userService, 'joinGroup'])->add($authMiddleware);
 
     // create group
     $app->post('/group', [$groupService, 'createGroup'])->add($authMiddleware);
