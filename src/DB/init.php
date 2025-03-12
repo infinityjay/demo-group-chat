@@ -40,7 +40,7 @@ function initializeDatabase(): PDO {
             user_id     INTEGER NOT NULL,
             group_id    INTEGER NOT NULL,
             created_at  TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE (user_id, group_id)
+            CONSTRAINT unq UNIQUE (user_id, group_id)
         )"
     ];
 

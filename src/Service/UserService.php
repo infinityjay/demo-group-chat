@@ -74,6 +74,12 @@ class UserService {
         if (empty($groupId)) {
             return $this->jsonResponse($response, ['error' => 'groupId cannot be empty'], 400);
         }
+        // check if group exists
+        $stmt = $this->db->prepare("SELECT id FROM `group` WHERE id = ?");
+        $stmt->execute([$groupId]);
+        if (!$stmt->fetch()) {
+            return $this->jsonResponse($response, ['error' => 'Group does not exist'], 404);
+        }
 
         try {
             $stmt = $this->db->prepare("INSERT INTO user_group (user_id, group_id) VALUES (?, ?)");
