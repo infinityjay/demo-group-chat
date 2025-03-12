@@ -1,0 +1,20 @@
+{
+    "name": "jay/demo-group-chat",
+    "require": {
+        "slim/slim": "^4",
+        "phpunit/phpunit": "^9.5",
+        "slim/psr7": "dev-master"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jie Chen",
+            "email": "chenjienudt@gmail.com"
+        }
+    ]
+}

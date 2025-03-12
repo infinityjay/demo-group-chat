@@ -36,7 +36,7 @@ All communication between the client and server should happen over a simple REST
 
 ## File Structure
 
-use tree command.
+use tree command. tree -I 'vendor'
 
 
 
@@ -50,25 +50,20 @@ use tree command.
 
 Official documentation: https://www.slimframework.com/docs/v4/
 
-### ORM
-
-* Cycle ORM
-
-Official documentation: https://cycle-orm.dev/docs
 
 
 
+## Test
 
+* Unit test
 
-
-
-## Test tools
-
-* postman
-
-I use postman to design and test the RESTful API, and the APIs are exported to a .json file. You can check it by loading it into postman.
-
+The unit test folder is tests/ which is already configured in file phpunit.xml.
+ And we can run the unit test just with the command `./vendor/bin/phpunit`.
 
 
 ## Future improvements
 
+* Use ORM framework
+
+It will take some time for me to use some ORM framework like Laravel/orm or Doctrine well.
+But the use of ORM will grant the project more scalability.
