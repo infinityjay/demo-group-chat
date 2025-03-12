@@ -61,6 +61,7 @@ class MessageService {
         $queryParams = $request->getQueryParams();
         $limit = $queryParams['limit'] ?? 10;
         $offset = $queryParams['offset'] ?? 0;
+        // Get user info from token, Auth middleware already set to attribute
         $user = $request->getAttribute('user');
         $userId = $user['id'] ?? null;
 
