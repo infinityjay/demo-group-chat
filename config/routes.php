@@ -1,11 +1,8 @@
 <?php
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
 
 require __DIR__ . '/../src/Middleware/AuthMiddleware.php';
-require __DIR__ . '/../src/Action/HomeAction.php';
 require_once __DIR__ . '/../src/Service/UserService.php';
 require_once __DIR__ . '/../src/Service/GroupService.php';
 require_once __DIR__ . '/../src/Service/MessageService.php';
@@ -20,10 +17,6 @@ return function (App $app) {
     $userService = new UserService($db, $authMiddleware);
     $groupService = new GroupService($db);
     $messageService = new MessageService($db);
-
-    // register routes, add AuthMiddleware
-    $app->get('/', HomeAction::class);
-    $app->get('/hello', [HomeAction::class, 'SendHello'])->add($authMiddleware);
 
     // create user, don't need auth verification
     $app->post('/user', [$userService, 'createUser']);

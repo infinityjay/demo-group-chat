@@ -18,8 +18,10 @@ function initializeDatabase(): PDO {
             token      TEXT UNIQUE NOT NULL
         )",
         "CREATE TABLE IF NOT EXISTS `group` (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            groupname   TEXT UNIQUE NOT NULL
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            groupname       TEXT UNIQUE NOT NULL,
+            create_user_id  INTEGER NOT NULL,
+            created_at      TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         )",
         "CREATE TABLE IF NOT EXISTS message (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
