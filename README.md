@@ -28,7 +28,16 @@ All communication between the client and server should happen over a simple REST
 
 ## Usage examples
 
+Enter the root dir, and run the following command.
 
+```bash
+php -S localhost:8081 -t public/ 
+
+# I also add a start command in the composer.json, you can just use start to simplify the command
+
+composer start
+
+```
 
 
 
@@ -60,6 +69,12 @@ Official documentation: https://www.slimframework.com/docs/v4/
 The unit test folder is tests/ which is already configured in file phpunit.xml.
  And we can run the unit test just with the command `./vendor/bin/phpunit`.
 
+* Integration test
+
+I use Postman to execute the integration tests. I already export the API documentation
+ as .json file and store it in the folder `./docs/`. You can also import them into Postman 
+and test the APIs.
+
 
 ## Future improvements
 
@@ -73,3 +88,12 @@ But the use of ORM will grant the project more scalability.
 For messages, if there are many records, we can set pagination query and set 100 limit for each query.
 Also use resumeToken to concat the results. More general solution is to build a long connection such 
 as WebSocket connection between the user and the group server, and server with real-time message stream.
+
+* Automation integration test
+
+There are standard ways to use postman and newman to develop the automation integration test for APIs. 
+I once wrote a simple automation test tool with newman and gitlab. I also wrote part of the solution on 
+my [personal blog](https://infinityjay.github.io/ci/cd/Gitlab-CI-use-mysql-service/). Due to time and 
+environment limitations, I did not develop such testing tools.
+
+
