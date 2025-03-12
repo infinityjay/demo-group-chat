@@ -38,6 +38,12 @@ class MessageService {
         if (!$stmt->fetch()) {
             return $this->jsonResponse($response, ['error' => 'User does not exist'], 404);
         }
+        // Check if user in the group
+        $stmt = $this->db->prepare("SELECT id FROM `user_group` WHERE user_id = ? AND group_id = ?");
+        $stmt->execute([$userId, $groupId]);
+        if (!$stmt->fetch()) {
+            return $this->jsonResponse($response, ['error' => 'User is not in the group'], 404);
+        }
 
         try {
             $stmt = $this->db->prepare("INSERT INTO message (user_id, group_id, content) VALUES (?, ?, ?)");
