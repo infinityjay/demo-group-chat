@@ -28,12 +28,12 @@ return function (App $app) {
     // create user, don't need auth verification
     $app->post('/user', [$userService, 'createUser']);
     // get user info
-    $app->get('/users', [$userService, 'getUser'])->add($authMiddleware);
+    $app->get('/user', [$userService, 'getUser'])->add($authMiddleware);
 
     // create group
     $app->post('/group', [$groupService, 'createGroup'])->add($authMiddleware);
     // get group info
-    $app->get('/groups', [$groupService, 'getGroup'])->add($authMiddleware);
+    $app->get('/group', [$groupService, 'getGroup'])->add($authMiddleware);
 
     // create message
     $app->post('/groups/{id}/messages', [$messageService, 'createMessage'])->add($authMiddleware);

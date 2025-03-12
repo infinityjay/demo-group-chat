@@ -33,18 +33,32 @@ class UserService {
                 'token' => $token
             ], 201);
         } catch (PDOException $e) {
-            if ($e->getCode() == 23000) { // SQLite UNIQUE constraint violation
+            // unique key error
+            if ($e->getCode() == 23000) {
                 return $this->jsonResponse($response, ['error' => 'Username already exists'], 409);
             }
+            // server error
             return $this->jsonResponse($response, ['error' => 'Database error: ' . $e->getMessage()], 500);
         }
     }
 
     public function getUser(Request $request, Response $response) {
-        $stmt = $this->db->query("SELECT id, username FROM user");
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $params = $request->getQueryParams();
+        $userId = $params['id'] ?? null;
+        if (empty($userId)) {
+            return $this->jsonResponse($response, ['error' => 'userId cannot be empty'], 400);
+        }
 
-        return $this->jsonResponse($response, $users);
+        $stmt = $this->db->prepare("SELECT id, username FROM user WHERE id = ?");
+        $stmt->execute([$userId]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            return $this->jsonResponse($response, ['error' => 'User not found'], 404);
+        }
+
+        return $this->jsonResponse($response, $user);
+
     }
 
     private function jsonResponse(Response $response, $data, $status = 200) {
