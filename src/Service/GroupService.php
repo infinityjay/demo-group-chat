@@ -2,14 +2,21 @@
 
 use Psr\Http\Message\ResponseInterface as Response;
 
-class GroupService {
+# load db from container
+//$container = require __DIR__ . '/container.php';
+//$db = $container->get('db');
+
+class GroupService
+{
     private $db;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->db = $db;
     }
 
-    public function createGroup(Response $response, $data) {
+    public function createGroup(Response $response, $data)
+    {
         $groupname = $data['groupname'] ?? '';
 
         if (empty($groupname)) {
@@ -32,14 +39,16 @@ class GroupService {
         }
     }
 
-    public function getGroups(Response $response) {
+    public function getGroup(Response $response)
+    {
         $stmt = $this->db->query("SELECT id, groupname FROM `group`");
         $groups = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $this->jsonResponse($response, $groups);
     }
 
-    private function jsonResponse(Response $response, $data, $status = 200) {
+    private function jsonResponse(Response $response, $data, $status = 200)
+    {
         $response->getBody()->write(json_encode($data));
         return $response
             ->withHeader('Content-Type', 'application/json')

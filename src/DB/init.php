@@ -1,7 +1,13 @@
 <?php
 
 function initializeDatabase(): PDO {
-    $dbPath = __DIR__ . '/chat.db';
+    static $dbInstance = null;
+
+    if ($dbInstance !== null) {
+        return $dbInstance;
+    }
+
+    $dbPath = __DIR__ . '/../../chat.db';
     $db = new PDO('sqlite:' . $dbPath);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -27,7 +33,7 @@ function initializeDatabase(): PDO {
     foreach ($tables as $sql) {
         $db->exec($sql);
     }
-    echo 'The database is initiated.';
 
+    $dbInstance = $db;
     return $db;
 }

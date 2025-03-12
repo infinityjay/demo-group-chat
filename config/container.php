@@ -9,6 +9,12 @@ return [
         return require __DIR__ . '/settings.php';
     },
 
+    // Database connection
+    'db' => function (ContainerInterface $container) {
+        require_once __DIR__ . '/../src/DB/init.php';
+        return initializeDatabase();
+    },
+
     App::class => function (ContainerInterface $container) {
         $app = AppFactory::createFromContainer($container);
 

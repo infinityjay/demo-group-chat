@@ -1,7 +1,9 @@
 <?php
 
 use Psr\Http\Message\ResponseInterface as Response;
-require __DIR__ . '/../Middleware/AuthMiddleware.php';
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+require_once __DIR__ . '/../Middleware/AuthMiddleware.php';
 
 class UserService {
     private $db;
@@ -12,9 +14,9 @@ class UserService {
         $this->authMiddleware = $authMiddleware;
     }
 
-    public function createUser(Response $response, $data) {
+    public function createUser(Request $request, Response $response) {
+        $data = $request->getParsedBody();
         $username = $data['username'] ?? '';
-
         if (empty($username)) {
             return $this->jsonResponse($response, ['error' => 'Username cannot be empty'], 400);
         }
@@ -38,7 +40,7 @@ class UserService {
         }
     }
 
-    public function getUsers(Response $response) {
+    public function getUser(Request $request, Response $response) {
         $stmt = $this->db->query("SELECT id, username FROM user");
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

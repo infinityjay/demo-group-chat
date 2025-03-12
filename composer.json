@@ -4,7 +4,8 @@
         "slim/slim": "^4",
         "phpunit/phpunit": "^9.5",
         "slim/psr7": "dev-master",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "php-di/php-di": "^7.0"
     },
     "license": "MIT",
     "autoload": {
@@ -17,5 +18,11 @@
             "name": "Jie Chen",
             "email": "chenjienudt@gmail.com"
         }
-    ]
+    ],
+    "config": {
+        "process-timeout": 0
+    },
+    "scripts": {
+        "start": "php -S localhost:8081 -t public/"
+    }
 }
