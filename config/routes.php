@@ -2,7 +2,7 @@
 
 use Slim\App;
 
-require __DIR__ . '/../src/Middleware/AuthMiddleware.php';
+require_once __DIR__ . '/../src/Middleware/AuthMiddleware.php';
 require_once __DIR__ . '/../src/Service/UserService.php';
 require_once __DIR__ . '/../src/Service/GroupService.php';
 require_once __DIR__ . '/../src/Service/MessageService.php';
